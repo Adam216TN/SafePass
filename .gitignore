@@ -1,0 +1,34 @@
+# --- Exécutables et Binaires ---
+*.exe
+*.o
+*.obj
+*.so
+*.a
+*.lib
+# Ton fichier binaire final (le nom de ton projet)
+SafePass
+
+# --- Dossiers de Build (Le plus important) ---
+# Qt Creator crée souvent des dossiers commençant par build-
+build*/
+debug/
+release/
+*.pud
+*.ilk
+*.pdb
+
+# --- Fichiers générés par Qt (Ne pas versionner !) ---
+# Ce sont des fichiers créés automatiquement à partir de tes .ui et .qrc
+ui_*.h
+moc_*.cpp
+qrc_*.cpp
+Makefile*
+*.moc
+
+# --- Fichiers de configuration utilisateur (IDE) ---
+# Contient tes chemins locaux, ne fonctionnera pas chez les autres
+*.user
+.vscode/
+.idea/
+*.swp
+*.session
