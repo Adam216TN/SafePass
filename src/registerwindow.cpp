@@ -4,9 +4,10 @@
 #include <QMessageBox>
 
 
-RegisterWindow::RegisterWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::RegisterWindow){
+RegisterWindow::RegisterWindow(DatabaseManager *dbManager,QWidget *parent) : QMainWindow(parent), ui(new Ui::RegisterWindow), db(dbManager){
     ui->setupUi(this);
 
+    
     connect(ui->create, &QPushButton::clicked, this, &RegisterWindow::onCreateClick);
     connect(ui->confirm_password, &QLineEdit::returnPressed, this, &RegisterWindow::onCreateClick);
 
@@ -33,6 +34,8 @@ void RegisterWindow::onCreateClick(){
         QMessageBox::warning(this,"Error","The password is not the same");
         return;
     }
+
+    db->addUser(email,password);
 
     emit createRequested();
     this->close();

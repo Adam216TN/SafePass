@@ -1,5 +1,6 @@
 #include "databasemanager.h"
 #include <QDebug>
+#include <QSqlError>
 
 DatabaseManager::DatabaseManager(){
 

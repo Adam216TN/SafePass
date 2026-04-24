@@ -2,6 +2,7 @@
 #define REGISTERWINDOW_H
 
 #include <QMainWindow>
+#include "databasemanager.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class RegisterWindow;}
@@ -13,7 +14,7 @@ class RegisterWindow : public QMainWindow{
     Q_OBJECT
 
 public:
-    RegisterWindow(QWidget *parent = nullptr);
+    RegisterWindow(DatabaseManager *dbManager, QWidget *parent = nullptr);
     ~RegisterWindow();
 
 private slots:
@@ -23,6 +24,7 @@ private slots:
 private:
     
     Ui::RegisterWindow *ui;
+    DatabaseManager *db;
 
 signals:
 

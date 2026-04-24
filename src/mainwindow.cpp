@@ -8,9 +8,10 @@
 #include <QCursor>
 
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), vault(nullptr), isUnlocked(false), q(new QMenu(this)){
+MainWindow::MainWindow(DatabaseManager *dbManager,QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), vault(nullptr), isUnlocked(false), q(new QMenu(this)),db(dbManager){
     ui->setupUi(this);
 
+    
     connect(ui->checkShowPassword, &QCheckBox::toggled, this, &MainWindow::onTogglePassword);
     connect(ui->btnconnect, &QPushButton::clicked, this, &MainWindow::onUnlockClicked);
     connect(ui->lineEdit, &QLineEdit::returnPressed, this, &MainWindow::onUnlockClicked);

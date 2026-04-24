@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QSystemTrayIcon>
 #include <QMenu>
+#include "databasemanager.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -16,7 +17,7 @@ class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    MainWindow(DatabaseManager *dbManager,QWidget *parent = nullptr);
     ~MainWindow();
 
 private slots:
@@ -30,6 +31,7 @@ private:
     QSystemTrayIcon *trayIcon;
     bool isUnlocked = false;
     QMenu *q;
+    DatabaseManager *db;
 };
 
 #endif
