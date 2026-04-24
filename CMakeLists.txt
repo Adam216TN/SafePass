@@ -8,7 +8,7 @@ set(CMAKE_AUTORCC ON)
 
 set(CMAKE_AUTOUIC_SEARCH_PATHS "${CMAKE_CURRENT_SOURCE_DIR}/ui")
 
-find_package(Qt6 REQUIRED COMPONENTS Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Widgets Sql)
 
 # On indique où sont les headers (.h)
 include_directories(include)
@@ -19,12 +19,14 @@ add_executable(SafePass
     src/mainwindow.cpp
     src/vaultwindow.cpp
     src/registerwindow.cpp
+    src/databasemanager.cpp
     include/mainwindow.h
     include/vaultwindow.h
     include/registerwindow.h
+    include/databasemanager.h
     ui/mainwindow.ui
     ui/vaultwindow.ui
     ui/registerwindow.ui
 )
 
-target_link_libraries(SafePass PRIVATE Qt6::Widgets)
+target_link_libraries(SafePass PRIVATE Qt6::Widgets Qt6::Sql)
