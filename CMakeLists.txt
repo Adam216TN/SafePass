@@ -18,10 +18,13 @@ add_executable(SafePass
     src/main.cpp
     src/mainwindow.cpp
     src/vaultwindow.cpp
+    src/registerwindow.cpp
     include/mainwindow.h
     include/vaultwindow.h
+    include/registerwindow.h
     ui/mainwindow.ui
     ui/vaultwindow.ui
+    ui/registerwindow.ui
 )
 
 target_link_libraries(SafePass PRIVATE Qt6::Widgets)
