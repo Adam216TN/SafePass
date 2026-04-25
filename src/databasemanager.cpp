@@ -24,12 +24,23 @@ bool DatabaseManager::initDatabase(){
     }
 
     QSqlQuery query;
-    QString sql = "CREATE TABLE IF NOT EXISTS users ("
+    QString sqlUsers = "CREATE TABLE IF NOT EXISTS users ("
                   "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                   "email TEXT UNIQUE, "
                   "master_hash TEXT)";
     
-    return query.exec(sql);
+    if(!query.exec(sqlUsers)) return false;
+
+    QString sqlData = "Create Table IF NOT EXISTS credentials("
+                      "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                      "user_id INTEGER,"
+                      "username TEXT, "
+                      "password TEXT, "
+                      "website TEXT, "
+                      "url TEXT,"
+                      "FOREIGN KEY(user_id) REFERENCES users(id))";
+
+    return query.exec(sqlData);
 }
 
 bool DatabaseManager::checkUserExists() {
