@@ -1,6 +1,7 @@
 #include "databasemanager.h"
 #include <QDebug>
 #include <QSqlError>
+#include <QCryptographicHash>
 
 DatabaseManager::DatabaseManager(){
 
@@ -39,7 +40,7 @@ bool DatabaseManager::checkUserExists() {
     return false;
 }
 
-bool DatabaseManager::addUser(const QString &email, const QString &passwordHash){
+bool DatabaseManager::addUser(const QString &email, const QString &password){
     
     if(!db.open()){
         qDebug() << "Erreur d'ouverture : " << db.lastError().text();
@@ -49,10 +50,14 @@ bool DatabaseManager::addUser(const QString &email, const QString &passwordHash)
     QSqlQuery query;
     QString sql = "Insert into users(email, master_hash) Values ("
                   "?,?)";
-            
+
+    QByteArray passwordData = password.toUtf8();
+    QByteArray hashedData = QCryptographicHash::hash(passwordData,QCryptographicHash::Sha256);
+    QByteArray passwordhash = hashedData.toHex();
+
     query.prepare(sql);
     query.addBindValue(email);
-    query.addBindValue(passwordHash);
+    query.addBindValue(passwordhash);
 
     return query.exec();
 }
