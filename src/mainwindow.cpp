@@ -8,10 +8,9 @@
 #include <QCursor>
 
 
-MainWindow::MainWindow(DatabaseManager *dbManager,QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), vault(nullptr), isUnlocked(false), q(new QMenu(this)),db(dbManager){
+MainWindow::MainWindow(DatabaseManager *dbManager,QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow),db(dbManager),vault(nullptr), isUnlocked(false), q(new QMenu(this)){
     ui->setupUi(this);
 
-    
     connect(ui->checkShowPassword, &QCheckBox::toggled, this, &MainWindow::onTogglePassword);
     connect(ui->btnconnect, &QPushButton::clicked, this, &MainWindow::onUnlockClicked);
     connect(ui->lineEdit, &QLineEdit::returnPressed, this, &MainWindow::onUnlockClicked);
@@ -90,7 +89,7 @@ void MainWindow::onUnlockClicked(){
         //QMessageBox::information(this,"Allowed Access","Welcome to your password manager !");
         isUnlocked = true;
         if (vault==nullptr){
-            vault = new VaultWindow();
+            vault = new VaultWindow(db);
             connect(vault, &VaultWindow::logoutRequested,this,&MainWindow::onLogout);
         }
         

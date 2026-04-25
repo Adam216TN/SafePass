@@ -3,6 +3,7 @@
 
 
 #include <QWidget>
+#include "databasemanager.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class VaultWindow; }
@@ -13,7 +14,7 @@ class VaultWindow : public QWidget {
     Q_OBJECT
 
 public:
-    VaultWindow(QWidget *parent = nullptr);
+    VaultWindow(DatabaseManager *dbManager,QWidget *parent = nullptr);
     ~VaultWindow();
 
 protected:
@@ -21,9 +22,12 @@ protected:
 
 private slots:
     void onDisconnectClicked();
+    void onAddClicked();
+    void onRemoveClicked();
 
 private:
     Ui::VaultWindow *ui;
+    DatabaseManager *db;
 
 signals:
     void logoutRequested();

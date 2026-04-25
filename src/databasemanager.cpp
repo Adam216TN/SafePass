@@ -73,6 +73,22 @@ bool DatabaseManager::addUser(const QString &email, const QString &password){
     return query.exec();
 }
 
+
+bool DatabaseManager::addData(const QString &username, const QString &password, const QString &website, const QString &url){
+
+    QSqlQuery query;
+    QString sql = "Insert into credentials(user_id, username, password, website, url) "
+                  "Values(1,?,?,?,?)";
+
+    query.prepare(sql);
+    query.addBindValue(username);
+    query.addBindValue(password);
+    query.addBindValue(website);
+    query.addBindValue(url);
+
+    return query.exec();
+}
+
 bool DatabaseManager::verifyLogin(const QString &password){
     
     QByteArray passwordData = password.toUtf8();
