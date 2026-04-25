@@ -27,6 +27,7 @@ add_executable(SafePass
     ui/mainwindow.ui
     ui/vaultwindow.ui
     ui/registerwindow.ui
+    assets.qrc
 )
 
 target_link_libraries(SafePass PRIVATE Qt6::Widgets Qt6::Sql)

@@ -3,6 +3,10 @@
 #include <QCloseEvent>
 #include <QDialog>
 #include <QFormLayout>
+#include <QClipboard>
+#include <QApplication>
+#include <QToolButton>
+#include <QMenu>
 
 VaultWindow::VaultWindow( DatabaseManager *database, QWidget *parent) : QWidget(parent), ui(new Ui::VaultWindow),db(database){
 
@@ -72,9 +76,49 @@ void VaultWindow::refreshTable(){
     for(int i = 0; i<liste.length();i++){
         
         ui->vault->setItem(i,0,new QTableWidgetItem(liste.at(i).username));
-        ui->vault->setItem(i,1,new QTableWidgetItem(liste.at(i).password));
+        QTableWidgetItem *password = new QTableWidgetItem(liste.at(i).password);
+        password->setText("**********");
+        password->setData(Qt::UserRole,liste.at(i).password);
+        ui->vault->setItem(i,1,password);
         ui->vault->setItem(i,2,new QTableWidgetItem(liste.at(i).website));
         ui->vault->setItem(i,3,new QTableWidgetItem(liste.at(i).url));
+
+        QToolButton *show = new QToolButton();
+        show->setIcon(QIcon(":/icons/assets/eye.png"));
+        
+        connect(show,&QToolButton::clicked,[=](){
+            if(password->text() == "**********"){
+                show->setIcon(QIcon(":/icons/assets/closed_eye.png"));
+                password->setText(password->data(Qt::UserRole).toString());
+            }else{
+                password->setText("**********");
+                show->setIcon(QIcon(":/icons/assets/eye.png"));
+            }
+        });
+        
+        ui->vault->setCellWidget(i,4,show);
+
+        QToolButton *copy = new QToolButton();
+        connect(copy,&QToolButton::clicked,[=](){
+            QMenu menu ;
+            QAction *pass_copy = menu.addAction("Copy Password");
+            QAction *user_copy = menu.addAction("Copy Username");
+
+            connect(pass_copy, &QAction::triggered,[=](){
+                QClipboard *clipboard = QApplication::clipboard();
+                clipboard->setText(liste.at(i).password);
+            });
+
+            connect(user_copy,&QAction::triggered,[=](){
+                QClipboard *clipboard = QApplication::clipboard();
+                clipboard->setText(liste.at(i).username);
+            });
+
+            menu.exec(QCursor::pos());
+        });
+
+        copy->setIcon(QIcon(":/icons/assets/copy.png"));
+        ui->vault->setCellWidget(i,5,copy);
         
     }
 }
