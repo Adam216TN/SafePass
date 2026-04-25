@@ -14,7 +14,9 @@ public:
     bool initDatabase();
     bool checkUserExists();
 
-    bool addUser(const QString &email, const QString &passwordHash);
+    bool addUser(const QString &email, const QString &password);
+
+    bool verifyLogin(const QString &password);
 
 private:
     QSqlDatabase db ;

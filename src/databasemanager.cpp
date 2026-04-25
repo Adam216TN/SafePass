@@ -61,3 +61,18 @@ bool DatabaseManager::addUser(const QString &email, const QString &password){
 
     return query.exec();
 }
+
+bool DatabaseManager::verifyLogin(const QString &password){
+    
+    QByteArray passwordData = password.toUtf8();
+    QByteArray hashedData = QCryptographicHash::hash(passwordData,QCryptographicHash::Sha256);
+    QByteArray passwordhash = hashedData.toHex();
+    
+    QSqlQuery query("Select master_hash from users");
+    
+    if(query.next() && passwordhash == query.value(0)){
+        return true;
+    }
+    return false;
+
+}

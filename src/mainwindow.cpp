@@ -85,7 +85,7 @@ void MainWindow::onUnlockClicked(){
 
     QString password = ui->lineEdit->text();
 
-    if(password == "sorbonne"){
+    if(db->verifyLogin(password)){
 
         //QMessageBox::information(this,"Allowed Access","Welcome to your password manager !");
         isUnlocked = true;
