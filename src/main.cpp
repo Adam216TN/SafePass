@@ -9,16 +9,16 @@
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
 
-    DatabaseManager *db = new DatabaseManager();
-    db->initDatabase();
+    DatabaseManager db;
+    db.initDatabase();
 
     app.setApplicationName("SafePass");
     app.setApplicationDisplayName("SafePass");
     app.setQuitOnLastWindowClosed(false);
     
-    MainWindow window2(db);
-    if(!db->checkUserExists()){
-        RegisterWindow *window1 = new RegisterWindow(db);
+    MainWindow window2(&db);
+    if(!db.checkUserExists()){
+        RegisterWindow *window1 = new RegisterWindow(&db);
         window1->show();
         QObject::connect(window1,&RegisterWindow::createRequested,&window2,&MainWindow::show);
     }else{
