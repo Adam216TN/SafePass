@@ -24,6 +24,7 @@ private slots:
     void onDisconnectClicked();
     void onAddClicked();
     void onRemoveClicked();
+    void refreshTable();
 
 private:
     Ui::VaultWindow *ui;

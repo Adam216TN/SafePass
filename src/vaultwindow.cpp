@@ -10,6 +10,7 @@ VaultWindow::VaultWindow( DatabaseManager *database, QWidget *parent) : QWidget(
     connect(ui->btndisc,&QPushButton::clicked,this,&VaultWindow::onDisconnectClicked);
     connect(ui->btnadd,&QPushButton::clicked,this,&VaultWindow::onAddClicked);
     this->setWindowTitle("SafePass");
+    refreshTable();
 }
 
 VaultWindow::~VaultWindow(){
@@ -56,6 +57,24 @@ void VaultWindow::onAddClicked(){
 
         db->addData(user,pass,web,link);
     }
+
+    refreshTable();
 }
 
 void VaultWindow::onRemoveClicked(){}
+
+void VaultWindow::refreshTable(){
+    
+    ui->vault->setRowCount(0);
+    QList<Credential> liste = db->getAllCredentials();
+    ui->vault->setRowCount(liste.length());
+    
+    for(int i = 0; i<liste.length();i++){
+        
+        ui->vault->setItem(i,0,new QTableWidgetItem(liste.at(i).username));
+        ui->vault->setItem(i,1,new QTableWidgetItem(liste.at(i).password));
+        ui->vault->setItem(i,2,new QTableWidgetItem(liste.at(i).website));
+        ui->vault->setItem(i,3,new QTableWidgetItem(liste.at(i).url));
+        
+    }
+}

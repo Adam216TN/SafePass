@@ -103,3 +103,28 @@ bool DatabaseManager::verifyLogin(const QString &password){
     return false;
 
 }
+
+
+QList<Credential> DatabaseManager::getAllCredentials(){
+
+    QList<Credential> liste;
+    
+    QSqlQuery query;
+    QString sql = "Select id, username, password, website, url from credentials";
+
+    query.exec(sql);
+
+    while(query.next()){
+        Credential c;
+        c.id = query.value(0).toInt();
+        c.username = query.value(1).toString();
+        c.password = query.value(2).toString();
+        c.website = query.value(3).toString();
+        c.url = query.value(4).toString();
+
+        liste.append(c);
+    }
+
+    return liste;
+
+}

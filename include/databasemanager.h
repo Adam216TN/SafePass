@@ -4,6 +4,15 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 
+struct Credential
+{
+    int id;
+    QString username;
+    QString password;
+    QString website;
+    QString url;
+};
+
 class DatabaseManager{
 
 public:
@@ -18,6 +27,8 @@ public:
     bool addData(const QString &username, const QString &password, const QString &website, const QString &url);
 
     bool verifyLogin(const QString &password);
+
+    QList<Credential> getAllCredentials();
 
 private:
     QSqlDatabase db ;
