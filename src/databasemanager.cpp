@@ -91,6 +91,18 @@ bool DatabaseManager::addData(const QString &username, const QString &password, 
     return query.exec();
 }
 
+bool DatabaseManager::removeData(int id){
+
+    QSqlQuery query;
+    QString sql = "Delete From credentials"
+                  " Where id = ?";
+    
+    query.prepare(sql);
+    query.addBindValue(id);
+
+    return query.exec();
+}
+
 bool DatabaseManager::verifyLogin(const QString &password){
     
     QByteArray passwordData = password.toUtf8();

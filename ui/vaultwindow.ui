@@ -79,6 +79,13 @@
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="btnupd">
+       <property name="text">
+        <string>Update</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="btndisc">
        <property name="text">
         <string>Disconnect</string>

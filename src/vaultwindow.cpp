@@ -7,14 +7,19 @@
 #include <QApplication>
 #include <QToolButton>
 #include <QMenu>
+#include <QMessageBox>
 
 VaultWindow::VaultWindow( DatabaseManager *database, QWidget *parent) : QWidget(parent), ui(new Ui::VaultWindow),db(database){
 
     ui->setupUi(this);
     connect(ui->btndisc,&QPushButton::clicked,this,&VaultWindow::onDisconnectClicked);
     connect(ui->btnadd,&QPushButton::clicked,this,&VaultWindow::onAddClicked);
+    connect(ui->btnrem,&QPushButton::clicked,this,&VaultWindow::onRemoveClicked);
     this->setWindowTitle("SafePass");
     refreshTable();
+    ui->vault->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->vault->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->vault->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 
 VaultWindow::~VaultWindow(){
@@ -65,7 +70,23 @@ void VaultWindow::onAddClicked(){
     refreshTable();
 }
 
-void VaultWindow::onRemoveClicked(){}
+void VaultWindow::onRemoveClicked(){
+
+    int row = ui->vault->currentRow();
+    if(row == -1) return;
+    QTableWidgetItem *elt = ui->vault->item(row,0);
+    int id = elt->data(Qt::UserRole).toInt();
+
+    QMessageBox::StandardButton reply = QMessageBox::question(this, "Confirm Deletion", 
+                                     "Are you sure you want to delete this credential?",
+                                     QMessageBox::Yes | QMessageBox::No);
+
+    if(reply == QMessageBox::Yes){
+        if(db->removeData(id)){
+            refreshTable();
+        }
+    }
+}
 
 void VaultWindow::refreshTable(){
     
@@ -75,7 +96,9 @@ void VaultWindow::refreshTable(){
     
     for(int i = 0; i<liste.length();i++){
         
-        ui->vault->setItem(i,0,new QTableWidgetItem(liste.at(i).username));
+        QTableWidgetItem *username = new QTableWidgetItem(liste.at(i).username);
+        username->setData(Qt::UserRole,liste.at(i).id);
+        ui->vault->setItem(i,0,username);
         QTableWidgetItem *password = new QTableWidgetItem(liste.at(i).password);
         password->setText("**********");
         password->setData(Qt::UserRole,liste.at(i).password);

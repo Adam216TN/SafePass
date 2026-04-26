@@ -25,7 +25,9 @@ public:
     bool checkUserExists();
 
     bool addUser(const QString &email, const QString &password);
+    
     bool addData(const QString &username, const QString &password, const QString &website, const QString &url);
+    bool removeData(int id);
 
     bool verifyLogin(const QString &password);
 
