@@ -10,10 +10,8 @@ set(CMAKE_AUTOUIC_SEARCH_PATHS "${CMAKE_CURRENT_SOURCE_DIR}/ui")
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets Sql)
 
-# On indique où sont les headers (.h)
 include_directories(include)
 
-# On liste les fichiers sources
 add_executable(SafePass 
     src/main.cpp
     src/mainwindow.cpp

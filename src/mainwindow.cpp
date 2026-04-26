@@ -11,7 +11,17 @@
 MainWindow::MainWindow(DatabaseManager *dbManager,QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow),db(dbManager),vault(nullptr), isUnlocked(false), q(new QMenu(this)){
     ui->setupUi(this);
 
-    connect(ui->checkShowPassword, &QCheckBox::toggled, this, &MainWindow::onTogglePassword);
+    QAction *toggleAction = ui->lineEdit->addAction(QIcon(":/icons/assets/eye.png"),QLineEdit::TrailingPosition);
+    
+    connect(toggleAction,&QAction::triggered,[=](){
+        if(ui->lineEdit->echoMode() == QLineEdit::Password){
+            ui->lineEdit->setEchoMode(QLineEdit::Normal);
+            toggleAction->setIcon(QIcon(":/icons/assets/closed_eye.png"));
+        }else{
+            ui->lineEdit->setEchoMode(QLineEdit::Password);
+            toggleAction->setIcon(QIcon(":/icons/assets/eye.png"));
+        }
+    });
     connect(ui->btnconnect, &QPushButton::clicked, this, &MainWindow::onUnlockClicked);
     connect(ui->lineEdit, &QLineEdit::returnPressed, this, &MainWindow::onUnlockClicked);
     
@@ -70,14 +80,6 @@ MainWindow::MainWindow(DatabaseManager *dbManager,QWidget *parent) : QMainWindow
 MainWindow::~MainWindow(){
     delete ui;
     if(vault) delete vault;
-}
-
-void MainWindow::onTogglePassword(bool checked){
-    if(checked){
-        ui->lineEdit->setEchoMode(QLineEdit::Normal);
-    }else{
-        ui->lineEdit->setEchoMode(QLineEdit::Password);
-    }
 }
 
 void MainWindow::onUnlockClicked(){

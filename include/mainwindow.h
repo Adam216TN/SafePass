@@ -22,7 +22,6 @@ public:
 
 private slots:
     void onUnlockClicked();
-    void onTogglePassword(bool checked);
     void onLogout();
 
 private:
