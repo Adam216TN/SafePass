@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(SafePass VERSION 1.0 LANGUAGES CXX)
+project(SafePass VERSION 1.0 LANGUAGES CXX C)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_AUTOMOC ON)
@@ -20,10 +20,14 @@ add_executable(SafePass
     src/vaultwindow.cpp
     src/registerwindow.cpp
     src/databasemanager.cpp
+    src/aes.c
+    src/simplecrypt.cpp
     include/mainwindow.h
     include/vaultwindow.h
     include/registerwindow.h
     include/databasemanager.h
+    include/aes.h
+    include/simplecrypt.h
     ui/mainwindow.ui
     ui/vaultwindow.ui
     ui/registerwindow.ui

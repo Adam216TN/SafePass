@@ -3,6 +3,7 @@
 
 #include <QSqlDatabase>
 #include <QSqlQuery>
+#include "simplecrypt.h"
 
 struct Credential
 {
@@ -32,6 +33,7 @@ public:
 
 private:
     QSqlDatabase db ;
+    SimpleCrypt cryptor;
 
 };
 

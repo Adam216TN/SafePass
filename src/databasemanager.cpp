@@ -76,13 +76,15 @@ bool DatabaseManager::addUser(const QString &email, const QString &password){
 
 bool DatabaseManager::addData(const QString &username, const QString &password, const QString &website, const QString &url){
 
+    QString encryptedPassword = cryptor.encrypt(password);
+    
     QSqlQuery query;
     QString sql = "Insert into credentials(user_id, username, password, website, url) "
                   "Values(1,?,?,?,?)";
 
     query.prepare(sql);
     query.addBindValue(username);
-    query.addBindValue(password);
+    query.addBindValue(encryptedPassword);
     query.addBindValue(website);
     query.addBindValue(url);
 
@@ -98,12 +100,12 @@ bool DatabaseManager::verifyLogin(const QString &password){
     QSqlQuery query("Select master_hash from users");
     
     if(query.next() && passwordhash == query.value(0)){
+        cryptor.setMasterKey(password);
         return true;
     }
     return false;
 
 }
-
 
 QList<Credential> DatabaseManager::getAllCredentials(){
 
@@ -118,7 +120,8 @@ QList<Credential> DatabaseManager::getAllCredentials(){
         Credential c;
         c.id = query.value(0).toInt();
         c.username = query.value(1).toString();
-        c.password = query.value(2).toString();
+        QString decrypted_password = cryptor.decrypt(query.value(2).toString());
+        c.password = decrypted_password;
         c.website = query.value(3).toString();
         c.url = query.value(4).toString();
 
