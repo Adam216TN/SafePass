@@ -24,6 +24,7 @@ private slots:
     void onDisconnectClicked();
     void onAddClicked();
     void onRemoveClicked();
+    void onUpdateClicked();
     void refreshTable();
 
 private:

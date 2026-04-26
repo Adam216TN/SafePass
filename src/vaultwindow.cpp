@@ -15,6 +15,7 @@ VaultWindow::VaultWindow( DatabaseManager *database, QWidget *parent) : QWidget(
     connect(ui->btndisc,&QPushButton::clicked,this,&VaultWindow::onDisconnectClicked);
     connect(ui->btnadd,&QPushButton::clicked,this,&VaultWindow::onAddClicked);
     connect(ui->btnrem,&QPushButton::clicked,this,&VaultWindow::onRemoveClicked);
+    connect(ui->btnupd,&QPushButton::clicked,this,&VaultWindow::onUpdateClicked);
     this->setWindowTitle("SafePass");
     refreshTable();
     ui->vault->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
@@ -86,6 +87,57 @@ void VaultWindow::onRemoveClicked(){
             refreshTable();
         }
     }
+}
+
+void VaultWindow::onUpdateClicked(){
+
+    int row = ui->vault->currentRow();
+    if(row == -1) return;
+
+    int id = ui->vault->item(row,0)->data(Qt::UserRole).toInt();
+
+    QString us = ui->vault->item(row,0)->text();
+    QString pw = ui->vault->item(row,1)->data(Qt::UserRole).toString();
+    QString ws = ui->vault->item(row,2)->text();
+    QString ul = ui->vault->item(row,3)->text();
+    
+    QDialog qd(this);
+    QVBoxLayout qv(&qd);
+    QFormLayout l;
+
+    QLineEdit *username = new QLineEdit(&qd);
+    QLineEdit *password = new QLineEdit(&qd);
+    QLineEdit *website = new QLineEdit(&qd);
+    QLineEdit *url = new QLineEdit(&qd);
+    QPushButton *update = new QPushButton("Update",&qd);
+
+    username->setText(us);
+    password->setText(pw);
+    website->setText(ws);
+    url->setText(ul);
+    
+    l.addRow("Username",username);
+    l.addRow("Password",password);
+    l.addRow("Website",website);
+    l.addRow("URL",url);
+    
+    qv.addLayout(&l);
+    qv.addWidget(update);
+    
+    connect(update,&QPushButton::clicked,&qd,&QDialog::accept);
+
+    if(qd.exec() == QDialog::Accepted){
+
+        QString user = username->text();
+        QString pass = password->text();
+        QString web = website->text();
+        QString link = url->text();
+
+        db->updateData(id,user,pass,web,link);
+    }
+
+    refreshTable();
+
 }
 
 void VaultWindow::refreshTable(){

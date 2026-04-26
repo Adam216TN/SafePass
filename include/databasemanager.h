@@ -28,6 +28,7 @@ public:
     
     bool addData(const QString &username, const QString &password, const QString &website, const QString &url);
     bool removeData(int id);
+    bool updateData(int id,const QString &username, const QString &password, const QString &website, const QString &url);
 
     bool verifyLogin(const QString &password);
 

@@ -38,7 +38,11 @@ QString SimpleCrypt::encrypt(const QString &plaintext){
 
 QString SimpleCrypt::decrypt(const QString &cipherText) {
     
+    if (cipherText.isEmpty()) return "";
+    
     QByteArray combined = QByteArray::fromBase64(cipherText.toUtf8());
+
+    if (combined.size() < 16) return "";
 
     QByteArray iv = combined.left(16);
     
@@ -53,9 +57,13 @@ QString SimpleCrypt::decrypt(const QString &cipherText) {
                            reinterpret_cast<uint8_t*>(data.data()), 
                            data.size());
 
+    if (data.isEmpty()) return "";
+    
     int paddingVal = static_cast<unsigned char>(data.at(data.size() - 1));
     
-    data.chop(paddingVal);
+    if (paddingVal > 0 && paddingVal <= 16 && paddingVal <= data.size()) {
+        data.chop(paddingVal);
+    }
 
     return QString::fromUtf8(data);
 }

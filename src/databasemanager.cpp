@@ -103,6 +103,25 @@ bool DatabaseManager::removeData(int id){
     return query.exec();
 }
 
+bool DatabaseManager::updateData(int id,const QString &username, const QString &password, const QString &website, const QString &url){
+    
+    QString encryptedPassword = cryptor.encrypt(password);
+    
+    QSqlQuery query;
+    QString sql = "Update credentials "
+                  "Set username = ?, password = ?, website = ?, url = ?"
+                  " Where id = ?";
+    
+    query.prepare(sql);
+    query.addBindValue(username);
+    query.addBindValue(encryptedPassword);
+    query.addBindValue(website);
+    query.addBindValue(url);
+    query.addBindValue(id);
+
+    return query.exec();
+}
+
 bool DatabaseManager::verifyLogin(const QString &password){
     
     QByteArray passwordData = password.toUtf8();
