@@ -4,5 +4,6 @@
         <file>assets/eye.png</file>
         <file>assets/closed_eye.png</file>
         <file>assets/copy.png</file>
+        <file>assets/lock.png</file>
     </qresource>
 </RCC>

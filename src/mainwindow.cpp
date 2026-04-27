@@ -29,9 +29,9 @@ MainWindow::MainWindow(DatabaseManager *dbManager,QWidget *parent) : QMainWindow
     this->setWindowTitle("SafePass");
 
     trayIcon = new QSystemTrayIcon(this);
-    trayIcon->setIcon(style()->standardIcon(QStyle::SP_ComputerIcon));
+    trayIcon->setIcon(QIcon(":/icons/assets/lock.png"));
     
-    QAction *titleAction = q->addAction(style()->standardIcon(QStyle::SP_ComputerIcon),"SafePass");
+    QAction *titleAction = q->addAction(QIcon(":/icons/assets/lock.png"),"SafePass");
     titleAction->setEnabled(false);
     
     q->addSeparator();
