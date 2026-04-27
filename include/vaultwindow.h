@@ -4,6 +4,7 @@
 
 #include <QWidget>
 #include "databasemanager.h"
+#include "simplecrypt.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class VaultWindow; }

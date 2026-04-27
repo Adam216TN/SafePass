@@ -67,3 +67,14 @@ QString SimpleCrypt::decrypt(const QString &cipherText) {
 
     return QString::fromUtf8(data);
 }
+
+QString SimpleCrypt::password_generator(int n){
+    
+    QString s;
+    for(int i = 0; i <n;i++){
+        int index = QRandomGenerator::securelySeeded().bounded(CHARSET.length());
+        s.append(CHARSET.at(index));
+    }
+
+    return s;
+}

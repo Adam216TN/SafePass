@@ -9,6 +9,7 @@
 #include <QMenu>
 #include <QMessageBox>
 
+
 VaultWindow::VaultWindow( DatabaseManager *database, QWidget *parent) : QWidget(parent), ui(new Ui::VaultWindow),db(database){
 
     ui->setupUi(this);
@@ -48,13 +49,44 @@ void VaultWindow::onAddClicked(){
     QLineEdit *url = new QLineEdit(&qd);
     QPushButton *accept = new QPushButton("Accept",&qd);
     
+    QAction *generate = password->addAction(style()->standardIcon(QStyle::SP_BrowserReload),QLineEdit::TrailingPosition);
+    generate->setToolTip("Generate");
+
+    QSlider *slider = new QSlider(Qt::Horizontal, &qd);
+    slider->setSingleStep(1);
+    slider->setTickInterval(3);
+    slider->setMinimum(8);
+    slider->setMaximum(32);
+    slider->setValue(16);
+    slider->setTickPosition(QSlider::TicksBelow);
+
+    QLabel *label = new QLabel(&qd);
+    label->setText(QString::number(slider->value()));
+    
+    connect(generate,&QAction::triggered,[=](){
+        QString s = SimpleCrypt::password_generator(slider->value());
+        password->setText(s);
+    });
+
+    connect(slider,&QSlider::valueChanged,[=](int val){
+        label->setText(QString::number(val));
+    });
+    
+    
+    QHBoxLayout *hLayout = new QHBoxLayout();
+    hLayout->addWidget(slider);
+    hLayout->addWidget(label);
+    
     l.addRow("Username",username);
     l.addRow("Password",password);
+    l.addRow(hLayout);
     l.addRow("Website",website);
     l.addRow("URL",url);
     
     qv.addLayout(&l);
     qv.addWidget(accept);
+
+    qd.resize(400,400);
     
     connect(accept,&QPushButton::clicked,&qd,&QDialog::accept);
     
@@ -115,14 +147,44 @@ void VaultWindow::onUpdateClicked(){
     password->setText(pw);
     website->setText(ws);
     url->setText(ul);
+
+    QAction *generate = password->addAction(style()->standardIcon(QStyle::SP_BrowserReload),QLineEdit::TrailingPosition);
+    generate->setToolTip("Generate");
+
+    QSlider *slider = new QSlider(Qt::Horizontal, &qd);
+    slider->setSingleStep(1);
+    slider->setTickInterval(3);
+    slider->setMinimum(8);
+    slider->setMaximum(32);
+    slider->setValue(16);
+    slider->setTickPosition(QSlider::TicksBelow);
+
+    QLabel *label = new QLabel(&qd);
+    label->setText(QString::number(slider->value()));
+    
+    connect(generate,&QAction::triggered,[=](){
+        QString s = SimpleCrypt::password_generator(slider->value());
+        password->setText(s);
+    });
+
+    connect(slider,&QSlider::valueChanged,[=](int val){
+        label->setText(QString::number(val));
+    });
+    
+    QHBoxLayout *hLayout = new QHBoxLayout();
+    hLayout->addWidget(slider);
+    hLayout->addWidget(label);
     
     l.addRow("Username",username);
     l.addRow("Password",password);
+    l.addRow(hLayout);
     l.addRow("Website",website);
     l.addRow("URL",url);
     
     qv.addLayout(&l);
     qv.addWidget(update);
+
+    qd.resize(400,400);
     
     connect(update,&QPushButton::clicked,&qd,&QDialog::accept);
 

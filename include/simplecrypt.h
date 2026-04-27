@@ -14,13 +14,11 @@ public:
 
     QString encrypt(const QString &plainText);
     QString decrypt(const QString &cipherText);
+    static QString password_generator(int n);
 
 private:
     QByteArray m_key;
-
+    inline static const QString CHARSET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
 };
-
-
-
 
 #endif
