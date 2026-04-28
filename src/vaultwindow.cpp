@@ -8,6 +8,7 @@
 #include <QToolButton>
 #include <QMenu>
 #include <QMessageBox>
+#include <QLabel>
 
 
 VaultWindow::VaultWindow( DatabaseManager *database, QWidget *parent) : QWidget(parent), ui(new Ui::VaultWindow),db(database){
@@ -17,11 +18,14 @@ VaultWindow::VaultWindow( DatabaseManager *database, QWidget *parent) : QWidget(
     connect(ui->btnadd,&QPushButton::clicked,this,&VaultWindow::onAddClicked);
     connect(ui->btnrem,&QPushButton::clicked,this,&VaultWindow::onRemoveClicked);
     connect(ui->btnupd,&QPushButton::clicked,this,&VaultWindow::onUpdateClicked);
+    connect(ui->searchbar,&QLineEdit::textChanged,this,&VaultWindow::onSearch);
     this->setWindowTitle("SafePass");
     refreshTable();
     ui->vault->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->vault->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->vault->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->vault->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->searchbar->addAction(QIcon(":/icons/assets/magnifier.png"),QLineEdit::TrailingPosition);
 }
 
 VaultWindow::~VaultWindow(){
@@ -257,5 +261,20 @@ void VaultWindow::refreshTable(){
         copy->setIcon(QIcon(":/icons/assets/copy.png"));
         ui->vault->setCellWidget(i,5,copy);
         
+    }
+}
+
+void VaultWindow::onSearch(){
+    QString search = ui->searchbar->text();
+    
+    for(int i = 0; i < ui->vault->rowCount();i++){
+        QTableWidgetItem* websiteItem = ui->vault->item(i,2);
+        if(websiteItem){
+            QString website = websiteItem->text();
+
+            bool match = website.contains(search,Qt::CaseInsensitive);
+
+            ui->vault->setRowHidden(i,!match);
+        }
     }
 }

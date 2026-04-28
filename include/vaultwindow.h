@@ -27,6 +27,7 @@ private slots:
     void onRemoveClicked();
     void onUpdateClicked();
     void refreshTable();
+    void onSearch();
 
 private:
     Ui::VaultWindow *ui;

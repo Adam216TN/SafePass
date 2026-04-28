@@ -17,14 +17,11 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QLabel" name="searchzone">
-       <property name="text">
-        <string>   Search  : </string>
+      <widget class="QLineEdit" name="searchbar">
+       <property name="placeholderText">
+        <string>Search a Website</string>
        </property>
       </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="searchbar"/>
      </item>
     </layout>
    </item>
