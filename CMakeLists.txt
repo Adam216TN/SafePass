@@ -8,7 +8,7 @@ set(CMAKE_AUTORCC ON)
 
 set(CMAKE_AUTOUIC_SEARCH_PATHS "${CMAKE_CURRENT_SOURCE_DIR}/ui")
 
-find_package(Qt6 REQUIRED COMPONENTS Widgets Sql)
+find_package(Qt6 REQUIRED COMPONENTS Widgets Sql Network)
 
 include_directories(include)
 
@@ -32,4 +32,4 @@ add_executable(SafePass
     assets.qrc
 )
 
-target_link_libraries(SafePass PRIVATE Qt6::Widgets Qt6::Sql)
+target_link_libraries(SafePass PRIVATE Qt6::Widgets Qt6::Sql Qt6::Network)

@@ -10,7 +10,7 @@ extern "C" {
 class SimpleCrypt{
 
 public:
-    void setMasterKey(const QString &password);
+    void setMasterKey(const QByteArray &password);
 
     QString encrypt(const QString &plainText);
     QString decrypt(const QString &cipherText);

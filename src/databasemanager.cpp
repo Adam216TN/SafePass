@@ -2,6 +2,8 @@
 #include <QDebug>
 #include <QSqlError>
 #include <QCryptographicHash>
+#include <QRandomGenerator>
+#include <QPasswordDigestor>
 
 DatabaseManager::DatabaseManager(){
 
@@ -27,7 +29,8 @@ bool DatabaseManager::initDatabase(){
     QString sqlUsers = "CREATE TABLE IF NOT EXISTS users ("
                   "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                   "email TEXT UNIQUE, "
-                  "master_hash TEXT)";
+                  "master_hash TEXT, "
+                  "salt TEXT)";
     
     if(!query.exec(sqlUsers)) return false;
 
@@ -59,16 +62,21 @@ bool DatabaseManager::addUser(const QString &email, const QString &password){
     }
 
     QSqlQuery query;
-    QString sql = "Insert into users(email, master_hash) Values ("
-                  "?,?)";
+    QString sql = "Insert into users(email, master_hash, salt) Values ("
+                  "?,?,?)";
 
     QByteArray passwordData = password.toUtf8();
-    QByteArray hashedData = QCryptographicHash::hash(passwordData,QCryptographicHash::Sha256);
+    
+    QByteArray salt(16,0);
+    QRandomGenerator::securelySeeded().fillRange(reinterpret_cast<uint32_t*>(salt.data()),salt.size()/4);
+    QByteArray hashedData = QPasswordDigestor::deriveKeyPbkdf2(QCryptographicHash::Sha256,passwordData,salt,100000,32);
+    
     QByteArray passwordhash = hashedData.toHex();
 
     query.prepare(sql);
     query.addBindValue(email);
     query.addBindValue(passwordhash);
+    query.addBindValue(salt.toHex());
 
     return query.exec();
 }
@@ -124,18 +132,24 @@ bool DatabaseManager::updateData(int id,const QString &username, const QString &
 
 bool DatabaseManager::verifyLogin(const QString &password){
     
-    QByteArray passwordData = password.toUtf8();
-    QByteArray hashedData = QCryptographicHash::hash(passwordData,QCryptographicHash::Sha256);
-    QByteArray passwordhash = hashedData.toHex();
-    
-    QSqlQuery query("Select master_hash from users");
-    
-    if(query.next() && passwordhash == query.value(0)){
-        cryptor.setMasterKey(password);
-        return true;
-    }
-    return false;
+    QSqlQuery query("Select salt, master_hash from users");
 
+    if(query.next()){
+
+        QByteArray s = query.value(0).toByteArray();
+        QByteArray salt = QByteArray::fromHex(s);
+        QByteArray passwordData = password.toUtf8();
+        QByteArray hashedData = QPasswordDigestor::deriveKeyPbkdf2(QCryptographicHash::Sha256,passwordData,salt,100000,32);
+        
+        QByteArray passwordhash = hashedData.toHex();
+        
+        if(passwordhash == query.value(1)){
+            cryptor.setMasterKey(hashedData);
+            return true;
+        }
+    }
+    
+    return false;
 }
 
 QList<Credential> DatabaseManager::getAllCredentials(){

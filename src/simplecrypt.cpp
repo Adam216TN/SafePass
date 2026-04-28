@@ -2,10 +2,9 @@
 #include "QCryptographicHash"
 #include "QRandomGenerator"
 
-void SimpleCrypt::setMasterKey(const QString &password){
+void SimpleCrypt::setMasterKey(const QByteArray &password){
     
-    QByteArray passwordData = password.toUtf8();
-    m_key = QCryptographicHash::hash(passwordData,QCryptographicHash::Sha256);
+    m_key = password;
 }
 
 QString SimpleCrypt::encrypt(const QString &plaintext){
