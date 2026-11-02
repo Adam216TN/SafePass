@@ -31,6 +31,7 @@ public:
     bool updateData(int id,const QString &username, const QString &password, const QString &website, const QString &url);
 
     bool verifyLogin(const QString &password);
+    void logout();
 
     QList<Credential> getAllCredentials();
 

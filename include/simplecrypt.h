@@ -11,7 +11,7 @@ class SimpleCrypt{
 
 public:
     void setMasterKey(const QByteArray &password);
-
+    void clear();
     QString encrypt(const QString &plainText);
     QString decrypt(const QString &cipherText);
     static QString password_generator(int n);

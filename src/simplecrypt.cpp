@@ -7,6 +7,10 @@ void SimpleCrypt::setMasterKey(const QByteArray &password){
     m_key = password;
 }
 
+void SimpleCrypt::clear(){
+    m_key.fill(0);
+}
+
 QString SimpleCrypt::encrypt(const QString &plaintext){
 
     QByteArray data = plaintext.toUtf8();

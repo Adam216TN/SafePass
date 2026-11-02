@@ -109,6 +109,7 @@ void MainWindow::onUnlockClicked(){
 
 void MainWindow::onLogout(){
     isUnlocked = false;
+    db->logout();
     delete vault;
     vault = nullptr;
     this->show();

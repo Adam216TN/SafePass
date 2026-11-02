@@ -17,6 +17,7 @@ DatabaseManager::~DatabaseManager(){
     if(db.isOpen()){
         db.close();
     }
+    cryptor.clear();
 }
 
 bool DatabaseManager::initDatabase(){
@@ -69,15 +70,16 @@ bool DatabaseManager::addUser(const QString &email, const QString &password){
     
     QByteArray salt(16,0);
     QRandomGenerator::securelySeeded().fillRange(reinterpret_cast<uint32_t*>(salt.data()),salt.size()/4);
-    QByteArray hashedData = QPasswordDigestor::deriveKeyPbkdf2(QCryptographicHash::Sha256,passwordData,salt,100000,32);
+    QByteArray hashedData = QPasswordDigestor::deriveKeyPbkdf2(QCryptographicHash::Sha256,passwordData,salt,100000,64);
     
-    QByteArray passwordhash = hashedData.toHex();
+    //QByteArray aes_key = hashedData.left(32);
+    QByteArray passwordhash = hashedData.mid(32,32).toHex();
 
     query.prepare(sql);
     query.addBindValue(email);
     query.addBindValue(passwordhash);
     query.addBindValue(salt.toHex());
-
+    
     return query.exec();
 }
 
@@ -139,12 +141,13 @@ bool DatabaseManager::verifyLogin(const QString &password){
         QByteArray s = query.value(0).toByteArray();
         QByteArray salt = QByteArray::fromHex(s);
         QByteArray passwordData = password.toUtf8();
-        QByteArray hashedData = QPasswordDigestor::deriveKeyPbkdf2(QCryptographicHash::Sha256,passwordData,salt,100000,32);
+        QByteArray hashedData = QPasswordDigestor::deriveKeyPbkdf2(QCryptographicHash::Sha256,passwordData,salt,100000,64);
         
-        QByteArray passwordhash = hashedData.toHex();
+        QByteArray aes_key = hashedData.left(32);
+        QByteArray passwordhash = hashedData.mid(32,32).toHex();
         
         if(passwordhash == query.value(1)){
-            cryptor.setMasterKey(hashedData);
+            cryptor.setMasterKey(aes_key);
             return true;
         }
     }
@@ -175,4 +178,8 @@ QList<Credential> DatabaseManager::getAllCredentials(){
 
     return liste;
 
+}
+
+void DatabaseManager::logout(){
+    cryptor.clear();
 }
