@@ -59,6 +59,16 @@ This project uses the tiny-AES-c library for AES encryption management.
 
     License: The aes.c and aes.h files are included in compliance with their original open-source license.
 
+
+⚠️ Known Limitations & Threat Model
+
+This project is a cryptographic proof-of-concept developed for academic purposes.
+Current architectural areas identified for future hardening:
+- **AEAD Transition:** Current cipher uses AES-256-CBC with PKCS#7; migration target is AES-256-GCM to prevent malleability and padding-oracle attacks.
+- **Memory Footprint:** Plaintext credentials reside in Qt table models upon load; target is lazy-decryption on display/copy actions with memory zeroization.
+- **Clipboard Sanitization:** Implement an automatic 30-second clipboard clearing timer.
+
+
 🚀 Getting Started
 
     Clone the repository:
